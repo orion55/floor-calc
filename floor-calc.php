@@ -16,10 +16,5 @@ require plugin_dir_path(__FILE__) . 'inc/admin_options.php';
 
 require plugin_dir_path(__FILE__) . 'shortcode/class-floor-shortcode.php';
 
-function run_floor_shortcode()
-{
-    $shortcode = new Floor_Shortcode();
-    $shortcode->init();
-}
-
-run_floor_shortcode();
+$shortcode = new Floor_Shortcode();
+$shortcode->init();
