@@ -17,7 +17,7 @@ class Floor_Shortcode
         self::$add_script = true;
 
         $html = "
-        <div id=\"floor-calc\"><h1>Hello!!!</h1></div>
+        <div id=\"floor-calc\"><floor></floor></div>
         ";
 
         return $html;
@@ -26,8 +26,10 @@ class Floor_Shortcode
     static function register_script()
     {
         $url = plugin_dir_url(__FILE__);
-//        wp_register_style('main', plugin_dir_url(__FILE__) . 'assets/css/main.min.css', array(), time(), 'all');
-//        wp_register_script('build', plugin_dir_url(__FILE__) . 'assets/js/build.js', array('jquery'), time(), true);
+        wp_register_style('floorlibs', plugin_dir_url(__FILE__) . 'dist/floorlib.css', array(), time(), 'all');
+        wp_register_script('vue', plugin_dir_url(__FILE__) . 'js/vue.min.js', array(), null, true);
+        wp_register_script('floorlib', plugin_dir_url(__FILE__) . 'dist/floorlib.umd.js', array('vue'), time(), true);
+        wp_register_script('main', plugin_dir_url(__FILE__) . 'js/main.js', array('floorlib'), null, true);
     }
 
     static function print_script()
@@ -35,8 +37,10 @@ class Floor_Shortcode
         if (!self::$add_script) {
             return;
         }
-//        wp_enqueue_style('main');
-//        wp_print_scripts('build');
+        wp_enqueue_style('floorlibs');
+        wp_print_scripts('vue');
+        wp_print_scripts('floorlib');
+        wp_print_scripts('main');
     }
 
     static function js_variables()

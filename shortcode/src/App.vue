@@ -16,6 +16,6 @@
         font-family: "Avenir", Helvetica, Arial, sans-serif;
         text-align: center;
         color: coral;
-        margin-top: 60px;
+        /*margin-top: 60px;*/
     }
 </style>
