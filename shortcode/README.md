@@ -1,4 +1,4 @@
-# shortcode
+# hello-world
 
 ## Project setup
 ```

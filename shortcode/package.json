@@ -1,11 +1,10 @@
 {
   "name": "shortcode",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
     "build-lib": "vue-cli-service build --target lib --name floorlib"
   },
   "dependencies": {
@@ -14,19 +13,13 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.3.0",
-    "@vue/cli-plugin-eslint": "^3.3.0",
     "@vue/cli-service": "^3.3.0",
-    "@vue/eslint-config-prettier": "^4.0.1",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.8.0",
-    "eslint-plugin-vue": "^5.0.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.1",
+    "vue-template-compiler": "^2.5.21",
     "gulp": "^3.9.1",
     "gulp-shell": "^0.6.5",
-    "node-sass": "^4.9.0",
-    "prettier": "^1.16.0",
     "run-sequence": "^2.2.1",
-    "sass-loader": "^7.0.1",
-    "vinyl-ftp": "^0.6.1",
-    "vue-template-compiler": "^2.5.21"
+    "vinyl-ftp": "^0.6.1"
   }
 }
