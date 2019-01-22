@@ -10,12 +10,21 @@
                          :show-labels="false" :maxHeight="200"
                          class="calc__dropdown calc__dropdown--object"
                          :allow-empty="false"></multiselect>
-            <div class="calc__head">Количество комнат</div>
-            <multiselect v-model="numberOfRooms.selected" :options="numberOfRooms.options"
-                         label="name" track-by="id" :searchable="false"
-                         :show-labels="false" :maxHeight="200"
-                         class="calc__dropdown calc__dropdown--number"
-                         :allow-empty="false"></multiselect>
+            <div v-if="objectCleaning.selected.id === 0">
+                <div class="calc__head">Количество комнат</div>
+                <multiselect v-model="numberOfRooms.selected" :options="numberOfRooms.options"
+                             label="name" track-by="id" :searchable="false"
+                             :show-labels="false" :maxHeight="200"
+                             class="calc__dropdown calc__dropdown&#45;&#45;number"
+                             :allow-empty="false"></multiselect>
+            </div>
+            <div v-else>
+                <div class="calc__head">Площадь уборки</div>
+                <div class="calc__area">
+                    <input type="number" class="calc__input" max="1000" v-model="cleaningArea.value">
+                    <span class="calc__sup">м<sup><small>2</small></sup></span>
+                </div>
+            </div>
             <div class="calc__head">Периодичность уборки</div>
             <multiselect v-model="periodicity.selected" :options="periodicity.options"
                          label="name" track-by="id" :searchable="false"
@@ -71,6 +80,10 @@
         cleaningType: {
           selected: {},
           options: []
+        },
+        cleaningArea: {
+          value: 0,
+          price: 0
         }
       }
     },
@@ -86,6 +99,26 @@
           })
           this.objectCleaning.selected = this.objectCleaning.options[0]
 
+          //Заполняем список количество комнат
+          _.forEach(this.info.data.numberOfRooms, (item) => {
+            this.numberOfRooms.options.push(item)
+          })
+          this.numberOfRooms.selected = this.numberOfRooms.options[0]
+
+          //Заполняем список периодичность уборки
+          _.forEach(this.info.data.periodicity, (item) => {
+            this.periodicity.options.push(item)
+          })
+          this.periodicity.selected = this.periodicity.options[0]
+
+          //Заполняем список периодичность уборки
+          _.forEach(this.info.data.cleaningType, (item) => {
+            this.cleaningType.options.push(item)
+          })
+          this.cleaningType.selected = this.cleaningType.options[0]
+
+          this.cleaningArea.price = this.info.data.cleaningArea.price
+
           this.info.loading = false
         }, error => {
           this.info.loading = false
@@ -100,6 +133,7 @@
 <style lang="scss">
     $color-main: #F25E99;
     $color-two: darken($color-main, 10%);
+
     #floor-calc {
         .calc__form {
             position: absolute;
@@ -227,9 +261,7 @@
         }
 
         .btn:hover {
-            /*color: #4C4C4C;*/
             background-color: $color-two;
-            /*transform: translateY(1px);*/
         }
 
         .btn::-moz-focus-inner {
@@ -277,7 +309,7 @@
         }
         .calc__services {
             font-size: 15px;
-            padding: 10px 10px;
+            padding: 7px 10px;
             border: #CDCDCD 1px solid;
             border-radius: 10px;
             margin-top: 7px;
@@ -287,8 +319,8 @@
             justify-content: left;
             transition: all .4s ease;
             &:hover {
-                border: 1px solid #ee2f7b;
-                color: #ee2f7b;
+                border: 1px solid $color-main;
+                color: $color-main;
             }
         }
         .calc__plus {
@@ -303,7 +335,23 @@
             padding-right: 10px;
         }
         .calc__sum {
-            color: #ee2f7b;
+            color: $color-main;
+        }
+        .calc__area {
+            display: flex;
+            align-items: left;
+            justify-content: flex-start;
+            flex-direction: row;
+        }
+        .calc__input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #cdcdcd;
+            border-radius: 10px;
+            color: #201e34;
+        }
+        .calc__sup {
+            padding-left: 5px;
         }
     }
 </style>
