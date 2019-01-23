@@ -4,45 +4,60 @@
             <div class="calc__loader"></div>
         </div>
         <div v-show="!info.loading" class="calc__box">
-            <div class="calc__head">Объект клининга</div>
-            <multiselect v-model="objectCleaning.selected" :options="objectCleaning.options"
-                         label="name" track-by="id" :searchable="false"
-                         :show-labels="false" :maxHeight="200"
-                         class="calc__dropdown calc__dropdown--object"
-                         :allow-empty="false"></multiselect>
-            <div v-if="objectCleaning.selected.id === 0">
-                <div class="calc__head">Количество комнат</div>
-                <multiselect v-model="numberOfRooms.selected" :options="numberOfRooms.options"
+            <div class="calc__container" v-show="!additionalServices.show">
+                <div class="calc__head">Объект клининга</div>
+                <multiselect v-model="objectCleaning.selected" :options="objectCleaning.options"
                              label="name" track-by="id" :searchable="false"
                              :show-labels="false" :maxHeight="200"
-                             class="calc__dropdown calc__dropdown&#45;&#45;number"
+                             class="calc__dropdown calc__dropdown--object"
+                             :allow-empty="false"></multiselect>
+                <div v-if="objectCleaning.selected.id === 0">
+                    <div class="calc__head">Количество комнат</div>
+                    <multiselect v-model="numberOfRooms.selected" :options="numberOfRooms.options"
+                                 label="name" track-by="id" :searchable="false"
+                                 :show-labels="false" :maxHeight="200"
+                                 class="calc__dropdown calc__dropdown&#45;&#45;number"
+                                 :allow-empty="false"></multiselect>
+                </div>
+                <div v-else>
+                    <div class="calc__head">Площадь уборки</div>
+                    <div class="calc__area">
+                        <input type="number" class="calc__input" max="1000" v-model="cleaningArea.value">
+                        <span class="calc__sup">м<sup><small>2</small></sup></span>
+                    </div>
+                </div>
+                <div class="calc__head">Периодичность уборки</div>
+                <multiselect v-model="periodicity.selected" :options="periodicity.options"
+                             label="name" track-by="id" :searchable="false"
+                             :show-labels="false" :maxHeight="200"
+                             class="calc__dropdown calc__dropdown--periodicity"
+                             :allow-empty="false"></multiselect>
+                <div class="calc__head">Тип уборки</div>
+                <multiselect v-model="cleaningType.selected" :options="cleaningType.options"
+                             label="name" track-by="id" :searchable="false"
+                             :show-labels="false" :maxHeight="200"
+                             class="calc__dropdown calc__dropdown--cleaning"
                              :allow-empty="false"></multiselect>
             </div>
-            <div v-else>
-                <div class="calc__head">Площадь уборки</div>
-                <div class="calc__area">
-                    <input type="number" class="calc__input" max="1000" v-model="cleaningArea.value">
-                    <span class="calc__sup">м<sup><small>2</small></sup></span>
-                </div>
+            <div :class="[{'calc__margin-top': !additionalServices.show}, 'calc__services', 'hvr-pop']"
+                 @click.prevent="additionalServices.show = !additionalServices.show">
+                Дополнительные услуги <span class="calc__icon" v-if="!additionalServices.show">&#43;</span>
+                <span class="calc__icon" v-else>&times;</span>
             </div>
-            <div class="calc__head">Периодичность уборки</div>
-            <multiselect v-model="periodicity.selected" :options="periodicity.options"
-                         label="name" track-by="id" :searchable="false"
-                         :show-labels="false" :maxHeight="200"
-                         class="calc__dropdown calc__dropdown--periodicity"
-                         :allow-empty="false"></multiselect>
-            <div class="calc__head">Тип уборки</div>
-            <multiselect v-model="cleaningType.selected" :options="cleaningType.options"
-                         label="name" track-by="id" :searchable="false"
-                         :show-labels="false" :maxHeight="200"
-                         class="calc__dropdown calc__dropdown--cleaning"
-                         :allow-empty="false"></multiselect>
-            <div class="calc__services hvr-pop"> Дополнительные услуги <span class="calc__plus">&#43;</span></div>
-            <div class="calc__price">от <span class="calc__sum">1000</span> ₽</div>
-            <button type="button" class="btn btn--result hvr-pop"
-                    @click.prevent="buttonCheckout.funct"
-                    ref="btnCheckout"> Заказать
-            </button>
+            <div class="calc__services-list" v-show="additionalServices.show">
+                <label class="control control-checkbox calc__label" v-for="item in additionalServices.data"
+                       :key="item.id" @click.self="log(item.id)">
+                    {{ item.name }}
+                    <input type="checkbox">
+                    <div class="control_indicator"></div>
+                </label>
+            </div>
+            <div class="calc__holder">
+                <div class="calc__price">от <span class="calc__sum">1000</span> ₽</div>
+                <button type="button" class="btn btn--result hvr-pop"
+                        @click.prevent="">Заказать
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -84,6 +99,11 @@
         cleaningArea: {
           value: 0,
           price: 0
+        },
+        additionalServices: {
+          show: false,
+          data: [],
+          checkedNames: []
         }
       }
     },
@@ -91,7 +111,6 @@
       this.$http.get(wp_data.plugin_dir_url + 'json/price.json')
         .then(response => {
           this.info.data = response.body
-          console.log(this.info.data)
 
           //Заполняем список объектов уборки
           _.forEach(this.info.data.objectCleaning, (item) => {
@@ -117,13 +136,22 @@
           })
           this.cleaningType.selected = this.cleaningType.options[0]
 
+          //устанавливаем цену уборки за квадратный метр
           this.cleaningArea.price = this.info.data.cleaningArea.price
+
+          //устанавливаем дополнительные услуги
+          this.additionalServices.data = this.info.data.additionalServices
 
           this.info.loading = false
         }, error => {
           this.info.loading = false
           console.error(error)
         })
+    },
+    methods: {
+      log: function (e) {
+        console.log(e)
+      }
     }
   }
 </script>
@@ -279,7 +307,7 @@
             color: white;
             height: 50px;
             width: 100%;
-            margin-top: auto;
+            /*margin-top: auto;*/
             box-shadow: 10px 11px 50px -13px rgba(0, 0, 0, 0.75);
         }
         .calc__box {
@@ -311,19 +339,22 @@
             font-size: 15px;
             padding: 7px 10px;
             border: #CDCDCD 1px solid;
-            border-radius: 10px;
-            margin-top: 7px;
+            border-radius: 7px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: left;
             transition: all .4s ease;
+            background-color: #fff;
             &:hover {
                 border: 1px solid $color-main;
                 color: $color-main;
             }
         }
-        .calc__plus {
+        .calc__margin-top {
+            margin-top: 7px;
+        }
+        .calc__icon {
             font-size: 18px;
             margin-left: auto;
             margin-right: 10px;
@@ -331,6 +362,7 @@
         .calc__price {
             font-size: 35px;
             padding-top: 7px;
+            padding-bottom: 7px;
             text-align: right;
             padding-right: 10px;
         }
@@ -352,6 +384,94 @@
         }
         .calc__sup {
             padding-left: 5px;
+        }
+        .calc__services-list {
+            overflow-y: auto;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 7px;
+            margin-top: 1px;
+            border: 1px solid #cdcdcd;
+            height: 65%;
+        }
+        .calc__holder {
+            margin-top: auto;
+        }
+        .control {
+            display: block;
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 5px;
+            padding-top: 3px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .control input {
+            position: absolute;
+            z-index: -1;
+            opacity: 0;
+        }
+
+        .control_indicator {
+            position: absolute;
+            top: 2px;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background: #fff;
+            //border: 0 solid #000000;
+            border: 1px solid #aaa;
+            border-radius: 50%;
+        }
+
+        .control-radio .control_indicator {
+            border-radius: 0;
+        }
+
+        .control:hover input ~ .control_indicator,
+        .control input:focus ~ .control_indicator {
+            background: #fff;
+        }
+
+        .control input:checked ~ .control_indicator {
+            background: $color-main;
+        }
+
+        .control:hover input:not([disabled]):checked ~ .control_indicator,
+        .control input:checked:focus ~ .control_indicator {
+            background: $color-main;
+        }
+
+        .control input:disabled ~ .control_indicator {
+            background: #fff;
+            //opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .control_indicator:after {
+            box-sizing: unset;
+            content: '';
+            position: absolute;
+            display: none;
+        }
+
+        .control input:checked ~ .control_indicator:after {
+            display: block;
+        }
+
+        .control-checkbox .control_indicator:after {
+            left: 7px;
+            top: 3px;
+            width: 3px;
+            height: 8px;
+            border: solid #ffffff;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .control-checkbox input:disabled ~ .control_indicator:after {
+            border-color: #7b7b7b;
         }
     }
 </style>
