@@ -4,54 +4,59 @@
             <div class="calc__loader"></div>
         </div>
         <div v-show="!info.loading" class="calc__box">
-            <div class="calc__container" v-show="!additionalServices.show">
-                <div class="calc__head">Объект клининга</div>
-                <multiselect v-model="objectCleaning.selected" :options="objectCleaning.options"
-                             label="name" track-by="id" :searchable="false"
-                             :show-labels="false" :maxHeight="200"
-                             class="calc__dropdown calc__dropdown--object"
-                             :allow-empty="false"></multiselect>
-                <div v-if="objectCleaning.selected.id === 0">
-                    <div class="calc__head">Количество комнат</div>
-                    <multiselect v-model="numberOfRooms.selected" :options="numberOfRooms.options"
+            <transition name="transition-box" enter-active-class="animated zoomIn"
+                        leave-active-class="animated fadeOut fast">
+                <div class="calc__container" v-if="!additionalServices.show">
+                    <div class="calc__head">Объект клининга</div>
+                    <multiselect v-model="objectCleaning.selected" :options="objectCleaning.options"
                                  label="name" track-by="id" :searchable="false"
                                  :show-labels="false" :maxHeight="200"
-                                 class="calc__dropdown calc__dropdown&#45;&#45;number"
+                                 class="calc__dropdown calc__dropdown--object"
+                                 :allow-empty="false"></multiselect>
+                    <div v-if="objectCleaning.selected.id === 0">
+                        <div class="calc__head">Количество комнат</div>
+                        <multiselect v-model="numberOfRooms.selected" :options="numberOfRooms.options"
+                                     label="name" track-by="id" :searchable="false"
+                                     :show-labels="false" :maxHeight="200"
+                                     class="calc__dropdown calc__dropdown&#45;&#45;number"
+                                     :allow-empty="false"></multiselect>
+                    </div>
+                    <div v-else>
+                        <div class="calc__head">Площадь уборки</div>
+                        <div class="calc__area">
+                            <input type="number" class="calc__input" min="40" max="220" v-model="cleaningArea.value">
+                            <span class="calc__sup">м<sup><small>2</small></sup></span>
+                        </div>
+                    </div>
+                    <div class="calc__head">Периодичность уборки</div>
+                    <multiselect v-model="periodicity.selected" :options="periodicity.options"
+                                 label="name" track-by="id" :searchable="false"
+                                 :show-labels="false" :maxHeight="200"
+                                 class="calc__dropdown calc__dropdown--periodicity"
+                                 :allow-empty="false"></multiselect>
+                    <div class="calc__head">Тип уборки</div>
+                    <multiselect v-model="cleaningType.selected" :options="cleaningType.options"
+                                 label="name" track-by="id" :searchable="false"
+                                 :show-labels="false" :maxHeight="200"
+                                 class="calc__dropdown calc__dropdown--cleaning"
                                  :allow-empty="false"></multiselect>
                 </div>
-                <div v-else>
-                    <div class="calc__head">Площадь уборки</div>
-                    <div class="calc__area">
-                        <input type="number" class="calc__input" max="1000" v-model="cleaningArea.value">
-                        <span class="calc__sup">м<sup><small>2</small></sup></span>
-                    </div>
-                </div>
-                <div class="calc__head">Периодичность уборки</div>
-                <multiselect v-model="periodicity.selected" :options="periodicity.options"
-                             label="name" track-by="id" :searchable="false"
-                             :show-labels="false" :maxHeight="200"
-                             class="calc__dropdown calc__dropdown--periodicity"
-                             :allow-empty="false"></multiselect>
-                <div class="calc__head">Тип уборки</div>
-                <multiselect v-model="cleaningType.selected" :options="cleaningType.options"
-                             label="name" track-by="id" :searchable="false"
-                             :show-labels="false" :maxHeight="200"
-                             class="calc__dropdown calc__dropdown--cleaning"
-                             :allow-empty="false"></multiselect>
-            </div>
-            <div :class="[{'calc__margin-top': !additionalServices.show}, 'calc__services', 'hvr-pop']"
+            </transition>
+            <div :class="[{'calc__margin-top': !additionalServices.show}, 'calc__services']"
                  @click.prevent="additionalServices.show = !additionalServices.show">
                 Дополнительные услуги <span class="calc__icon" v-if="!additionalServices.show">&#43;</span>
                 <span class="calc__icon" v-else>&times;</span>
             </div>
-            <div class="calc__services-list" v-show="additionalServices.show">
+
+            <div class="calc__services-list" v-if="additionalServices.show">
                 <label class="control control-checkbox calc__label" v-for="item in additionalServices.data"
-                       :key="item.id" @click.self="log(item.id)">
+                       :key="item.id" @click="changeIndex(item.id)">
                     {{ item.name }}
                     <input type="checkbox">
                     <div class="control_indicator"></div>
                 </label>
             </div>
+
             <div class="calc__holder">
                 <div class="calc__price">от <span class="calc__sum">1000</span> ₽</div>
                 <button type="button" class="btn btn--result hvr-pop"
@@ -97,13 +102,13 @@
           options: []
         },
         cleaningArea: {
-          value: 0,
+          value: 40,
           price: 0
         },
         additionalServices: {
           show: false,
           data: [],
-          checkedNames: []
+          checkedIndex: []
         }
       }
     },
@@ -141,6 +146,8 @@
 
           //устанавливаем дополнительные услуги
           this.additionalServices.data = this.info.data.additionalServices
+          this.additionalServices.checkedIndex = Array(this.additionalServices.data.length).fill(false)
+          // console.log(this.additionalServices.checkedIndex)
 
           this.info.loading = false
         }, error => {
@@ -151,12 +158,16 @@
     methods: {
       log: function (e) {
         console.log(e)
-      }
+      },
+      changeIndex: _.debounce(function (index) {
+        this.additionalServices.checkedIndex[index] = !this.additionalServices.checkedIndex[index]
+      }, 50)
     }
   }
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style src="animate.css/animate.min.css"></style>
 
 <style lang="scss">
     $color-main: #F25E99;
