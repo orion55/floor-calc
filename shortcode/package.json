@@ -17,6 +17,7 @@
     "@vue/cli-plugin-babel": "^3.3.0",
     "@vue/cli-service": "^3.3.0",
     "animate.css": "^3.7.0",
+    "gsap": "^2.0.2",
     "gulp": "^3.9.1",
     "gulp-shell": "^0.6.5",
     "hover.css": "^2.3.2",

@@ -47,18 +47,19 @@
                 Дополнительные услуги <span class="calc__icon" v-if="!additionalServices.show">&#43;</span>
                 <span class="calc__icon" v-else>&times;</span>
             </div>
-
-            <div class="calc__services-list" v-if="additionalServices.show">
-                <label class="control control-checkbox calc__label" v-for="item in additionalServices.data"
-                       :key="item.id" @click="changeIndex(item.id)">
-                    {{ item.name }}
-                    <input type="checkbox">
-                    <div class="control_indicator"></div>
-                </label>
-            </div>
-
+            <transition name="transition-box" enter-active-class="animated fadeIn delay-1s">
+                <div class="calc__services-list" v-if="additionalServices.show">
+                    <label class="control control-checkbox calc__label" v-for="item in additionalServices.data"
+                           :key="item.id" @click="changeIndex(item.id)">
+                        {{ item.name }}
+                        <input type="checkbox" v-if="additionalServices.checkedIndex[item.id]" checked>
+                        <input type="checkbox" v-else>
+                        <div class="control_indicator"></div>
+                    </label>
+                </div>
+            </transition>
             <div class="calc__holder">
-                <div class="calc__price">от <span class="calc__sum">1000</span> ₽</div>
+                <div class="calc__price">от <span class="calc__sum">{{animatedNumber}}</span> ₽</div>
                 <button type="button" class="btn btn--result hvr-pop"
                         @click.prevent="">Заказать
                 </button>
@@ -70,6 +71,7 @@
 <script>
   import Multiselect from 'vue-multiselect'
   import VueResource from 'vue-resource'
+  import { TweenLite } from 'gsap'
 
   var _ = require('lodash')
 
@@ -109,7 +111,45 @@
           show: false,
           data: [],
           checkedIndex: []
+        },
+        tweenedNumber: 0
+      }
+    },
+    computed: {
+      sum: function () {
+        let price = 0
+
+        if (!_.isEmpty(this.info.data)) {
+          price += +this.objectCleaning.selected.price
+
+          if (+this.objectCleaning.selected.id === 0) {
+            price += +this.numberOfRooms.selected.price
+          } else {
+            if (this.cleaningArea.value > 0) {
+              price += this.cleaningArea.value * this.cleaningArea.price
+            }
+          }
+
+          price += +this.periodicity.selected.price
+
+          price += +this.cleaningType.selected.price
+
+          this.additionalServices.checkedIndex.forEach((item, i) => {
+            if (item) {
+              price += +this.additionalServices.data[i].price
+            }
+          })
         }
+
+        return price
+      },
+      animatedNumber: function () {
+        return this.tweenedNumber.toFixed(0)
+      }
+    },
+    watch: {
+      sum: function (newValue) {
+        TweenLite.to(this.$data, 1, {tweenedNumber: newValue})
       }
     },
     mounted () {
@@ -142,7 +182,7 @@
           this.cleaningType.selected = this.cleaningType.options[0]
 
           //устанавливаем цену уборки за квадратный метр
-          this.cleaningArea.price = this.info.data.cleaningArea.price
+          this.cleaningArea.price = +this.info.data.cleaningArea.price
 
           //устанавливаем дополнительные услуги
           this.additionalServices.data = this.info.data.additionalServices
@@ -160,7 +200,7 @@
         console.log(e)
       },
       changeIndex: _.debounce(function (index) {
-        this.additionalServices.checkedIndex[index] = !this.additionalServices.checkedIndex[index]
+        this.additionalServices.checkedIndex.splice(index, 1, !this.additionalServices.checkedIndex[index])
       }, 50)
     }
   }
