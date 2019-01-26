@@ -1,67 +1,83 @@
 <template>
     <div class="calc__form">
-        <div v-show="info.loading" class="calc__preloader">
+        <div v-if="info.loading" class="calc__preloader">
             <div class="calc__loader"></div>
         </div>
-        <div v-show="!info.loading" class="calc__box">
-            <transition name="transition-box" enter-active-class="animated zoomIn"
-                        leave-active-class="animated fadeOut fast">
-                <div class="calc__container" v-if="!additionalServices.show">
-                    <div class="calc__head">Объект клининга</div>
-                    <multiselect v-model="objectCleaning.selected" :options="objectCleaning.options"
-                                 label="name" track-by="id" :searchable="false"
-                                 :show-labels="false" :maxHeight="200"
-                                 class="calc__dropdown calc__dropdown--object"
-                                 :allow-empty="false"></multiselect>
-                    <div v-if="objectCleaning.selected.id === 0">
-                        <div class="calc__head">Количество комнат</div>
-                        <multiselect v-model="numberOfRooms.selected" :options="numberOfRooms.options"
+        <div v-else class="calc__box">
+            <div v-if="!nextStage" class="calc__row">
+                <transition name="transition-box" enter-active-class="animated zoomIn"
+                            leave-active-class="animated fadeOut fast">
+                    <div class="calc__container" v-if="!additionalServices.show">
+                        <div class="calc__head">Объект клининга</div>
+                        <multiselect v-model="objectCleaning.selected" :options="objectCleaning.options"
                                      label="name" track-by="id" :searchable="false"
                                      :show-labels="false" :maxHeight="200"
-                                     class="calc__dropdown calc__dropdown&#45;&#45;number"
+                                     class="calc__dropdown calc__dropdown--object"
+                                     :allow-empty="false"></multiselect>
+                        <div v-if="objectCleaning.selected.id === 0">
+                            <div class="calc__head">Количество комнат</div>
+                            <multiselect v-model="numberOfRooms.selected" :options="numberOfRooms.options"
+                                         label="name" track-by="id" :searchable="false"
+                                         :show-labels="false" :maxHeight="200"
+                                         class="calc__dropdown calc__dropdown&#45;&#45;number"
+                                         :allow-empty="false"></multiselect>
+                        </div>
+                        <div v-else>
+                            <div class="calc__head">Площадь уборки</div>
+                            <div class="calc__area">
+                                <input type="number" class="calc__input" min="40" max="220"
+                                       v-model="cleaningArea.value">
+                                <span class="calc__sup">м<sup><small>2</small></sup></span>
+                            </div>
+                        </div>
+                        <div class="calc__head">Периодичность уборки</div>
+                        <multiselect v-model="periodicity.selected" :options="periodicity.options"
+                                     label="name" track-by="id" :searchable="false"
+                                     :show-labels="false" :maxHeight="200"
+                                     class="calc__dropdown calc__dropdown--periodicity"
+                                     :allow-empty="false"></multiselect>
+                        <div class="calc__head">Тип уборки</div>
+                        <multiselect v-model="cleaningType.selected" :options="cleaningType.options"
+                                     label="name" track-by="id" :searchable="false"
+                                     :show-labels="false" :maxHeight="200"
+                                     class="calc__dropdown calc__dropdown--cleaning"
                                      :allow-empty="false"></multiselect>
                     </div>
-                    <div v-else>
-                        <div class="calc__head">Площадь уборки</div>
-                        <div class="calc__area">
-                            <input type="number" class="calc__input" min="40" max="220" v-model="cleaningArea.value">
-                            <span class="calc__sup">м<sup><small>2</small></sup></span>
-                        </div>
+                </transition>
+                <div :class="[{'calc__margin-top': !additionalServices.show}, 'calc__services']"
+                     @click.prevent="additionalServices.show = !additionalServices.show">
+                    Дополнительные услуги <span class="calc__icon" v-if="!additionalServices.show">&#43;</span>
+                    <span class="calc__icon" v-else>&times;</span>
+                </div>
+                <transition name="transition-box" enter-active-class="animated fadeIn delay-1s">
+                    <div class="calc__services-list" v-if="additionalServices.show">
+                        <label class="control control-checkbox calc__label" v-for="item in additionalServices.data"
+                               :key="item.id" @click="changeIndex(item.id)">
+                            {{ item.name }}
+                            <input type="checkbox" v-if="additionalServices.checkedIndex[item.id]" checked>
+                            <input type="checkbox" v-else>
+                            <div class="control_indicator"></div>
+                        </label>
                     </div>
-                    <div class="calc__head">Периодичность уборки</div>
-                    <multiselect v-model="periodicity.selected" :options="periodicity.options"
-                                 label="name" track-by="id" :searchable="false"
-                                 :show-labels="false" :maxHeight="200"
-                                 class="calc__dropdown calc__dropdown--periodicity"
-                                 :allow-empty="false"></multiselect>
-                    <div class="calc__head">Тип уборки</div>
-                    <multiselect v-model="cleaningType.selected" :options="cleaningType.options"
-                                 label="name" track-by="id" :searchable="false"
-                                 :show-labels="false" :maxHeight="200"
-                                 class="calc__dropdown calc__dropdown--cleaning"
-                                 :allow-empty="false"></multiselect>
-                </div>
-            </transition>
-            <div :class="[{'calc__margin-top': !additionalServices.show}, 'calc__services']"
-                 @click.prevent="additionalServices.show = !additionalServices.show">
-                Дополнительные услуги <span class="calc__icon" v-if="!additionalServices.show">&#43;</span>
-                <span class="calc__icon" v-else>&times;</span>
+                </transition>
             </div>
-            <transition name="transition-box" enter-active-class="animated fadeIn delay-1s">
-                <div class="calc__services-list" v-if="additionalServices.show">
-                    <label class="control control-checkbox calc__label" v-for="item in additionalServices.data"
-                           :key="item.id" @click="changeIndex(item.id)">
-                        {{ item.name }}
-                        <input type="checkbox" v-if="additionalServices.checkedIndex[item.id]" checked>
-                        <input type="checkbox" v-else>
-                        <div class="control_indicator"></div>
-                    </label>
-                </div>
-            </transition>
+            <div v-else>
+                <label for="calc__name" class="calc__label">Имя</label>
+                <input id="calc__name" value=""
+                       :class="{'calc__input': true, 'calc__input--name': true, 'is-danger': errors.has('calc__name') }"
+                       placeholder="Представьтесь" v-model="contact.name"
+                       v-validate.disable="'required'"
+                       name="calc__name">
+                <label for="calc__phone" class="calc__label">Телефон</label>
+                <input id="calc__phone"
+                       :class="{'calc__input': true, 'calc__input--phone': true, 'is-danger': errors.has('calc__phone') }"
+                       placeholder="Ваш номер" v-model="contact.phone" ref="phone"
+                       v-validate.disable="'required'" name="calc__phone" v-mask="'+7 (999) 999 99 99'">
+            </div>
             <div class="calc__holder">
-                <div class="calc__price">от <span class="calc__sum">{{animatedNumber}}</span> ₽</div>
+                <div class="calc__price" v-if="!nextStage">от <span class="calc__sum">{{animatedNumber}}</span> ₽</div>
                 <button type="button" class="btn btn--result hvr-pop"
-                        @click.prevent="">Заказать
+                        @click.prevent="btnResult.actionFunct" ref="btnResult"> {{btnResult.title}}
                 </button>
             </div>
         </div>
@@ -72,11 +88,18 @@
   import Multiselect from 'vue-multiselect'
   import VueResource from 'vue-resource'
   import { TweenLite } from 'gsap'
+  import Simplert from 'vue2-simplert'
+  import VeeValidate from 'vee-validate'
+
+  const VueInputMask = require('vue-inputmask').default
 
   var _ = require('lodash')
 
   Vue.component('multiselect', Multiselect)
   Vue.use(VueResource)
+  Vue.component('simplert', Simplert)
+  Vue.use(VeeValidate)
+  Vue.use(VueInputMask)
 
   export default {
     name: 'app',
@@ -85,6 +108,7 @@
         info: {
           data: null,
           loading: true,
+          nextStage: false,
           errored: false,
         },
         objectCleaning: {
@@ -112,7 +136,16 @@
           data: [],
           checkedIndex: []
         },
-        tweenedNumber: 0
+        tweenedNumber: 0,
+        btnResult: {
+          actionFunct: this.orderAction,
+          // actionFunct: this.sendAction,
+          title: 'Заказать'
+        },
+        contact: {
+          name: '',
+          phone: ''
+        }
       }
     },
     computed: {
@@ -187,7 +220,6 @@
           //устанавливаем дополнительные услуги
           this.additionalServices.data = this.info.data.additionalServices
           this.additionalServices.checkedIndex = Array(this.additionalServices.data.length).fill(false)
-          // console.log(this.additionalServices.checkedIndex)
 
           this.info.loading = false
         }, error => {
@@ -201,7 +233,23 @@
       },
       changeIndex: _.debounce(function (index) {
         this.additionalServices.checkedIndex.splice(index, 1, !this.additionalServices.checkedIndex[index])
-      }, 50)
+      }, 50),
+      orderAction: function () {
+        this.nextStage = true
+        this.btnResult.actionFunct = this.sendAction
+        this.btnResult.title = 'Отправить'
+      },
+      sendAction: function () {
+        let self = this
+        this.$validator.validateAll()
+          .then((result) => {
+            if (result) {
+              console.log('Send!')
+            } else {
+              console.log('Not Send!')
+            }
+          })
+      }
     }
   }
 </script>
@@ -427,11 +475,22 @@
             flex-direction: row;
         }
         .calc__input {
+            display: inline-block;
             width: 100%;
             padding: 8px 10px;
             border: 1px solid #cdcdcd;
             border-radius: 10px;
             color: #201e34;
+            vertical-align: middle;
+            &::placeholder {
+                color: #ddd;
+            }
+            &:focus {
+                border-color: $color-main;
+                outline: 0;
+                box-shadow: 0 0 3px $color-main;
+                background-color: white;
+            }
         }
         .calc__sup {
             padding-left: 5px;
@@ -523,6 +582,20 @@
 
         .control-checkbox input:disabled ~ .control_indicator:after {
             border-color: #7b7b7b;
+        }
+        .calc__label {
+            display: inline-block;
+            font-weight: 700;
+            font-size: 15px;
+            vertical-align: middle;
+            padding-bottom: 7px;
+        }
+        .calc__input--name, .calc__input--phone {
+            margin-bottom: 7px;
+        }
+        input.is-danger {
+            border-color: red;
+            box-shadow: 0 0 3px red;
         }
     }
 </style>
