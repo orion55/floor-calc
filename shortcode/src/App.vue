@@ -4,7 +4,7 @@
             <div class="calc__loader"></div>
         </div>
         <div v-else class="calc__box">
-            <div v-if="!nextStage" class="calc__row">
+            <div v-show="!info.nextStage" class="calc__row">
                 <transition name="transition-box" enter-active-class="animated zoomIn"
                             leave-active-class="animated fadeOut fast">
                     <div class="calc__container" v-if="!additionalServices.show">
@@ -50,7 +50,7 @@
                     <span class="calc__icon" v-else>&times;</span>
                 </div>
                 <transition name="transition-box" enter-active-class="animated fadeIn delay-1s">
-                    <div class="calc__services-list" v-if="additionalServices.show">
+                    <div class="calc__services-list" v-show="additionalServices.show">
                         <label class="control control-checkbox calc__label" v-for="item in additionalServices.data"
                                :key="item.id" @click="changeIndex(item.id)">
                             {{ item.name }}
@@ -61,7 +61,8 @@
                     </div>
                 </transition>
             </div>
-            <div v-else>
+
+            <div v-show="info.nextStage">
                 <label for="calc__name" class="calc__label">Имя</label>
                 <input id="calc__name" value=""
                        :class="{'calc__input': true, 'calc__input--name': true, 'is-danger': errors.has('calc__name') }"
@@ -73,10 +74,16 @@
                        :class="{'calc__input': true, 'calc__input--phone': true, 'is-danger': errors.has('calc__phone') }"
                        placeholder="Ваш номер" v-model="contact.phone" ref="phone"
                        v-validate.disable="'required'" name="calc__phone" v-mask="'+7 (999) 999 99 99'">
+                <label class="control control-checkbox">
+                    Я согласен(а) на обработку моих персональных данных
+                    <input type="checkbox" @change="changeDisable"/>
+                </label>
             </div>
+
             <div class="calc__holder">
-                <div class="calc__price" v-if="!nextStage">от <span class="calc__sum">{{animatedNumber}}</span> ₽</div>
-                <button type="button" class="btn btn--result hvr-pop"
+                <div class="calc__price" v-if="!info.nextStage">от <span class="calc__sum">{{animatedNumber}}</span> ₽
+                </div>
+                <button type="button" :class="['btn', 'btn--result', 'hvr-pop', {'is-disable': btnResult.isDisable}]"
                         @click.prevent="btnResult.actionFunct" ref="btnResult"> {{btnResult.title}}
                 </button>
             </div>
@@ -139,8 +146,8 @@
         tweenedNumber: 0,
         btnResult: {
           actionFunct: this.orderAction,
-          // actionFunct: this.sendAction,
-          title: 'Заказать'
+          title: 'Заказать',
+          isDisable: false
         },
         contact: {
           name: '',
@@ -221,6 +228,8 @@
           this.additionalServices.data = this.info.data.additionalServices
           this.additionalServices.checkedIndex = Array(this.additionalServices.data.length).fill(false)
 
+          this.demoStage()
+
           this.info.loading = false
         }, error => {
           this.info.loading = false
@@ -235,9 +244,10 @@
         this.additionalServices.checkedIndex.splice(index, 1, !this.additionalServices.checkedIndex[index])
       }, 50),
       orderAction: function () {
-        this.nextStage = true
+        this.info.nextStage = true
         this.btnResult.actionFunct = this.sendAction
         this.btnResult.title = 'Отправить'
+        this.btnResult.isDisable = true
       },
       sendAction: function () {
         let self = this
@@ -249,6 +259,15 @@
               console.log('Not Send!')
             }
           })
+      },
+      demoStage: function () {
+        this.btnResult.isDisable = true
+        this.btnResult.actionFunct = this.sendAction
+        this.btnResult.title = 'Отправить'
+        this.info.nextStage = true
+      },
+      changeDisable: function () {
+        this.btnResult.isDisable = !this.btnResult.isDisable
       }
     }
   }
@@ -502,7 +521,7 @@
             border-radius: 7px;
             margin-top: 1px;
             border: 1px solid #cdcdcd;
-            height: 65%;
+            height: 90%;
         }
         .calc__holder {
             margin-top: auto;
@@ -596,6 +615,13 @@
         input.is-danger {
             border-color: red;
             box-shadow: 0 0 3px red;
+        }
+        .calc__row {
+            height: 67%;
+        }
+        .is-disable {
+            pointer-events: none;
+            opacity: .6;
         }
     }
 </style>
