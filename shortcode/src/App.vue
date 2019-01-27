@@ -77,6 +77,7 @@
                 <label class="control control-checkbox">
                     Я согласен(а) на обработку моих персональных данных
                     <input type="checkbox" @change="changeDisable"/>
+                    <div class="control_indicator"></div>
                 </label>
             </div>
 
