@@ -13,7 +13,7 @@ License: GPL2
 defined('ABSPATH') or die('Nope, not accessing this');
 
 require plugin_dir_path(__FILE__) . 'inc/admin_options.php';
-
+require plugin_dir_path(__FILE__) . 'inc/ajax-wp.php';
 require plugin_dir_path(__FILE__) . 'shortcode/class-floor-shortcode.php';
 
 $shortcode = new Floor_Shortcode();

@@ -96,16 +96,16 @@
   import Multiselect from 'vue-multiselect'
   import VueResource from 'vue-resource'
   import { TweenLite } from 'gsap'
-  import Simplert from 'vue2-simplert'
   import VeeValidate from 'vee-validate'
+  import VueSweetalert2 from 'vue-sweetalert2'
 
+  Vue.use(VueSweetalert2)
   const VueInputMask = require('vue-inputmask').default
 
-  var _ = require('lodash')
+  let _ = require('lodash')
 
   Vue.component('multiselect', Multiselect)
   Vue.use(VueResource)
-  Vue.component('simplert', Simplert)
   Vue.use(VeeValidate)
   Vue.use(VueInputMask)
 
@@ -153,6 +153,13 @@
         contact: {
           name: '',
           phone: ''
+        },
+        objAlertResult: {
+          title: '',
+          message: '',
+          type: '',
+          customCloseBtnClass: 'btn btn--modal',
+          customCloseBtnText: 'Ok'
         }
       }
     },
@@ -229,7 +236,7 @@
           this.additionalServices.data = this.info.data.additionalServices
           this.additionalServices.checkedIndex = Array(this.additionalServices.data.length).fill(false)
 
-          this.demoStage()
+          // this.demoStage()
 
           this.info.loading = false
         }, error => {
@@ -251,21 +258,47 @@
         this.btnResult.isDisable = true
       },
       sendAction: function () {
-        let self = this
         this.$validator.validateAll()
           .then((result) => {
             if (result) {
-              console.log('Send!')
+
+              let formData = new FormData()
+              formData.append('action', 'floor_add')
+              formData.append('nonce', wp_data.nonce)
+              formData.append('name', this.contact.name)
+              formData.append('phone', this.contact.phone)
+
+              this.$http.post(wp_data.url_ajax, formData)
+                .then(response => {
+                  let answer = response.data
+                  console.log(answer)
+                  if (answer.success) {
+                    this.$swal.fire({
+                      type: 'success',
+                      title: 'Спасибо за заказ!',
+                      text: answer.data,
+                      confirmButtonColor: '#F25E99'
+                    })
+                  } else {
+                    /*answer.data.forEach((element) => {
+                      this.objAlertResult.message += element + '<br />'
+                    })*/
+                  }
+                }, response => {
+
+                })
             } else {
-              console.log('Not Send!')
+              console.log('Ошибка при заполнении данных!')
             }
           })
       },
       demoStage: function () {
-        this.btnResult.isDisable = true
         this.btnResult.actionFunct = this.sendAction
         this.btnResult.title = 'Отправить'
         this.info.nextStage = true
+        this.contact.name = 'Иван Иванов'
+        this.contact.phone = '+7 (111) 111 11 11'
+        this.btnResult.isDisable = false
       },
       changeDisable: function () {
         this.btnResult.isDisable = !this.btnResult.isDisable
@@ -624,5 +657,9 @@
             pointer-events: none;
             opacity: .6;
         }
+    }
+
+    #swal2-title {
+        display: block !important;
     }
 </style>
