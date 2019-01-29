@@ -19,13 +19,13 @@
                             <multiselect v-model="numberOfRooms.selected" :options="numberOfRooms.options"
                                          label="name" track-by="id" :searchable="false"
                                          :show-labels="false" :maxHeight="200"
-                                         class="calc__dropdown calc__dropdown&#45;&#45;number"
+                                         class="calc__dropdown calc__dropdown--number"
                                          :allow-empty="false"></multiselect>
                         </div>
                         <div v-else>
                             <div class="calc__head">Площадь уборки</div>
                             <div class="calc__area">
-                                <input type="number" class="calc__input" min="40" max="220"
+                                <input type="number" class="calc__input" :min="cleaningArea.min" :max="cleaningArea.max"
                                        v-model="cleaningArea.value">
                                 <span class="calc__sup">м<sup><small>2</small></sup></span>
                             </div>
@@ -165,6 +165,7 @@
     },
     computed: {
       sum: function () {
+        //функция расчёта цены за работы клининга
         let price = 0
 
         if (!_.isEmpty(this.info.data)) {
@@ -201,6 +202,7 @@
       }
     },
     mounted () {
+      //загружаем данные из json файла (в основном цены) при монтированни формы
       this.$http.get(wp_data.plugin_dir_url + 'json/price.json')
         .then(response => {
           this.info.data = response.body
@@ -231,6 +233,8 @@
 
           //устанавливаем цену уборки за квадратный метр
           this.cleaningArea.price = +this.info.data.cleaningArea.price
+          this.cleaningArea.min = +this.info.data.cleaningArea.min
+          this.cleaningArea.max = +this.info.data.cleaningArea.max
 
           //устанавливаем дополнительные услуги
           this.additionalServices.data = this.info.data.additionalServices
@@ -248,25 +252,74 @@
       log: function (e) {
         console.log(e)
       },
+      //Меняем индекс в массиве дополнительных услуги и через splice, т.е. прямое изменение элемента массива нереактивно.
       changeIndex: _.debounce(function (index) {
         this.additionalServices.checkedIndex.splice(index, 1, !this.additionalServices.checkedIndex[index])
       }, 50),
       orderAction: function () {
+        //при нажатии на кнопку "Заказать" происходит проверка находится ли площадь помещения в указанном интервале.
+        // Если нет, то выводиться сообщение об ошибке
+        if (+this.objectCleaning.selected.id !== 0) {
+          const areaValue = this.cleaningArea.value
+          const min = this.cleaningArea.min
+          const max = this.cleaningArea.max
+          if (areaValue >= min && areaValue <= max) {
+            this.nextStageStep()
+          } else {
+            const Toast = this.$swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 4000
+            })
+
+            Toast.fire({
+              type: 'error',
+              title: `Площадь уборки должна быть от ${min} до ${max} м^2`
+            })
+          }
+        } else {
+          this.nextStageStep()
+        }
+      },
+      nextStageStep: function () {
+        //переход к следующему этапу
         this.info.nextStage = true
         this.btnResult.actionFunct = this.sendAction
         this.btnResult.title = 'Отправить'
         this.btnResult.isDisable = true
       },
       sendAction: function () {
+        //Процедура отправки данных на сервер.
+        //Проводим валидацию, заполняем данные, получаем ответ успешный или провальный
         this.$validator.validateAll()
           .then((result) => {
             if (result) {
-
               let formData = new FormData()
               formData.append('action', 'floor_add')
               formData.append('nonce', wp_data.nonce)
               formData.append('name', this.contact.name)
               formData.append('phone', this.contact.phone)
+              formData.append('objectCleaning', this.objectCleaning.selected.name)
+              if (+this.objectCleaning.selected.id === 0) {
+                formData.append('numberOfRooms', this.numberOfRooms.selected.name)
+              } else {
+                formData.append('cleaningArea', this.cleaningArea.value)
+              }
+              formData.append('periodicity', this.periodicity.selected.name)
+              formData.append('cleaningType', this.cleaningType.selected.name)
+
+              let j = 0
+              this.additionalServices.checkedIndex.forEach((item, i) => {
+                if (item) {
+                  formData.append(`additionalServices${j}`, this.additionalServices.data[i].name)
+                  j++
+                }
+              })
+              if (j !== 0) {
+                formData.append('additionalServicesCount', j)
+              }
+              formData.append('sum', this.sum)
 
               this.$http.post(wp_data.url_ajax, formData)
                 .then(response => {
@@ -280,12 +333,20 @@
                       confirmButtonColor: '#F25E99'
                     })
                   } else {
-                    /*answer.data.forEach((element) => {
-                      this.objAlertResult.message += element + '<br />'
-                    })*/
+                    let message = ''
+                    answer.data.forEach((element) => {
+                      message += element
+                    })
+                    this.$swal.fire({
+                      type: 'error', title: 'Ошибка', text: message,
+                      confirmButtonColor: '#F25E99'
+                    })
                   }
                 }, response => {
-
+                  this.$swal.fire({
+                    type: 'error', title: 'Ошибка', text: response.statusText,
+                    confirmButtonColor: '#F25E99'
+                  })
                 })
             } else {
               console.log('Ошибка при заполнении данных!')

@@ -20485,12 +20485,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules//.cache//vue-loader","cacheIdentifier":"22550d4c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/App.vue?vue&type=template&id=19c49f73&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"calc__form"},[(_vm.info.loading)?_c('div',{staticClass:"calc__preloader"},[_c('div',{staticClass:"calc__loader"})]):_c('div',{staticClass:"calc__box"},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(!_vm.info.nextStage),expression:"!info.nextStage"}],staticClass:"calc__row"},[_c('transition',{attrs:{"name":"transition-box","enter-active-class":"animated zoomIn","leave-active-class":"animated fadeOut fast"}},[(!_vm.additionalServices.show)?_c('div',{staticClass:"calc__container"},[_c('div',{staticClass:"calc__head"},[_vm._v("Объект клининга")]),_c('multiselect',{staticClass:"calc__dropdown calc__dropdown--object",attrs:{"options":_vm.objectCleaning.options,"label":"name","track-by":"id","searchable":false,"show-labels":false,"maxHeight":200,"allow-empty":false},model:{value:(_vm.objectCleaning.selected),callback:function ($$v) {_vm.$set(_vm.objectCleaning, "selected", $$v)},expression:"objectCleaning.selected"}}),(_vm.objectCleaning.selected.id === 0)?_c('div',[_c('div',{staticClass:"calc__head"},[_vm._v("Количество комнат")]),_c('multiselect',{staticClass:"calc__dropdown calc__dropdown&#45;&#45;number",attrs:{"options":_vm.numberOfRooms.options,"label":"name","track-by":"id","searchable":false,"show-labels":false,"maxHeight":200,"allow-empty":false},model:{value:(_vm.numberOfRooms.selected),callback:function ($$v) {_vm.$set(_vm.numberOfRooms, "selected", $$v)},expression:"numberOfRooms.selected"}})],1):_c('div',[_c('div',{staticClass:"calc__head"},[_vm._v("Площадь уборки")]),_c('div',{staticClass:"calc__area"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.cleaningArea.value),expression:"cleaningArea.value"}],staticClass:"calc__input",attrs:{"type":"number","min":"40","max":"220"},domProps:{"value":(_vm.cleaningArea.value)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.cleaningArea, "value", $event.target.value)}}}),_c('span',{staticClass:"calc__sup"},[_vm._v("м"),_c('sup',[_c('small',[_vm._v("2")])])])])]),_c('div',{staticClass:"calc__head"},[_vm._v("Периодичность уборки")]),_c('multiselect',{staticClass:"calc__dropdown calc__dropdown--periodicity",attrs:{"options":_vm.periodicity.options,"label":"name","track-by":"id","searchable":false,"show-labels":false,"maxHeight":200,"allow-empty":false},model:{value:(_vm.periodicity.selected),callback:function ($$v) {_vm.$set(_vm.periodicity, "selected", $$v)},expression:"periodicity.selected"}}),_c('div',{staticClass:"calc__head"},[_vm._v("Тип уборки")]),_c('multiselect',{staticClass:"calc__dropdown calc__dropdown--cleaning",attrs:{"options":_vm.cleaningType.options,"label":"name","track-by":"id","searchable":false,"show-labels":false,"maxHeight":200,"allow-empty":false},model:{value:(_vm.cleaningType.selected),callback:function ($$v) {_vm.$set(_vm.cleaningType, "selected", $$v)},expression:"cleaningType.selected"}})],1):_vm._e()]),_c('div',{class:[{'calc__margin-top': !_vm.additionalServices.show}, 'calc__services'],on:{"click":function($event){$event.preventDefault();_vm.additionalServices.show = !_vm.additionalServices.show}}},[_vm._v("\n                Дополнительные услуги "),(!_vm.additionalServices.show)?_c('span',{staticClass:"calc__icon"},[_vm._v("+")]):_c('span',{staticClass:"calc__icon"},[_vm._v("×")])]),_c('transition',{attrs:{"name":"transition-box","enter-active-class":"animated fadeIn delay-1s"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.additionalServices.show),expression:"additionalServices.show"}],staticClass:"calc__services-list"},_vm._l((_vm.additionalServices.data),function(item){return _c('label',{key:item.id,staticClass:"control control-checkbox calc__label",on:{"click":function($event){_vm.changeIndex(item.id)}}},[_vm._v("\n                        "+_vm._s(item.name)+"\n                        "),(_vm.additionalServices.checkedIndex[item.id])?_c('input',{attrs:{"type":"checkbox","checked":""}}):_c('input',{attrs:{"type":"checkbox"}}),_c('div',{staticClass:"control_indicator"})])}),0)])],1),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.info.nextStage),expression:"info.nextStage"}]},[_c('label',{staticClass:"calc__label",attrs:{"for":"calc__name"}},[_vm._v("Имя")]),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.contact.name),expression:"contact.name"},{name:"validate",rawName:"v-validate.disable",value:('required'),expression:"'required'",modifiers:{"disable":true}}],class:{'calc__input': true, 'calc__input--name': true, 'is-danger': _vm.errors.has('calc__name') },attrs:{"id":"calc__name","value":"","placeholder":"Представьтесь","name":"calc__name"},domProps:{"value":(_vm.contact.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.contact, "name", $event.target.value)}}}),_c('label',{staticClass:"calc__label",attrs:{"for":"calc__phone"}},[_vm._v("Телефон")]),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.contact.phone),expression:"contact.phone"},{name:"validate",rawName:"v-validate.disable",value:('required'),expression:"'required'",modifiers:{"disable":true}},{name:"mask",rawName:"v-mask",value:('+7 (999) 999 99 99'),expression:"'+7 (999) 999 99 99'"}],ref:"phone",class:{'calc__input': true, 'calc__input--phone': true, 'is-danger': _vm.errors.has('calc__phone') },attrs:{"id":"calc__phone","placeholder":"Ваш номер","name":"calc__phone"},domProps:{"value":(_vm.contact.phone)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.contact, "phone", $event.target.value)}}}),_c('label',{staticClass:"control control-checkbox"},[_vm._v("\n                Я согласен(а) на обработку моих персональных данных\n                "),_c('input',{attrs:{"type":"checkbox"},on:{"change":_vm.changeDisable}}),_c('div',{staticClass:"control_indicator"})])]),_c('div',{staticClass:"calc__holder"},[(!_vm.info.nextStage)?_c('div',{staticClass:"calc__price"},[_vm._v("от "),_c('span',{staticClass:"calc__sum"},[_vm._v(_vm._s(_vm.animatedNumber))]),_vm._v(" ₽\n            ")]):_vm._e(),_c('button',{ref:"btnResult",class:['btn', 'btn--result', 'hvr-pop', {'is-disable': _vm.btnResult.isDisable}],attrs:{"type":"button"},on:{"click":function($event){$event.preventDefault();return _vm.btnResult.actionFunct($event)}}},[_vm._v(" "+_vm._s(_vm.btnResult.title)+"\n            ")])])])])}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules//.cache//vue-loader","cacheIdentifier":"22550d4c-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/App.vue?vue&type=template&id=75bcb743&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"calc__form"},[(_vm.info.loading)?_c('div',{staticClass:"calc__preloader"},[_c('div',{staticClass:"calc__loader"})]):_c('div',{staticClass:"calc__box"},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(!_vm.info.nextStage),expression:"!info.nextStage"}],staticClass:"calc__row"},[_c('transition',{attrs:{"name":"transition-box","enter-active-class":"animated zoomIn","leave-active-class":"animated fadeOut fast"}},[(!_vm.additionalServices.show)?_c('div',{staticClass:"calc__container"},[_c('div',{staticClass:"calc__head"},[_vm._v("Объект клининга")]),_c('multiselect',{staticClass:"calc__dropdown calc__dropdown--object",attrs:{"options":_vm.objectCleaning.options,"label":"name","track-by":"id","searchable":false,"show-labels":false,"maxHeight":200,"allow-empty":false},model:{value:(_vm.objectCleaning.selected),callback:function ($$v) {_vm.$set(_vm.objectCleaning, "selected", $$v)},expression:"objectCleaning.selected"}}),(_vm.objectCleaning.selected.id === 0)?_c('div',[_c('div',{staticClass:"calc__head"},[_vm._v("Количество комнат")]),_c('multiselect',{staticClass:"calc__dropdown calc__dropdown--number",attrs:{"options":_vm.numberOfRooms.options,"label":"name","track-by":"id","searchable":false,"show-labels":false,"maxHeight":200,"allow-empty":false},model:{value:(_vm.numberOfRooms.selected),callback:function ($$v) {_vm.$set(_vm.numberOfRooms, "selected", $$v)},expression:"numberOfRooms.selected"}})],1):_c('div',[_c('div',{staticClass:"calc__head"},[_vm._v("Площадь уборки")]),_c('div',{staticClass:"calc__area"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.cleaningArea.value),expression:"cleaningArea.value"}],staticClass:"calc__input",attrs:{"type":"number","min":_vm.cleaningArea.min,"max":_vm.cleaningArea.max},domProps:{"value":(_vm.cleaningArea.value)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.cleaningArea, "value", $event.target.value)}}}),_c('span',{staticClass:"calc__sup"},[_vm._v("м"),_c('sup',[_c('small',[_vm._v("2")])])])])]),_c('div',{staticClass:"calc__head"},[_vm._v("Периодичность уборки")]),_c('multiselect',{staticClass:"calc__dropdown calc__dropdown--periodicity",attrs:{"options":_vm.periodicity.options,"label":"name","track-by":"id","searchable":false,"show-labels":false,"maxHeight":200,"allow-empty":false},model:{value:(_vm.periodicity.selected),callback:function ($$v) {_vm.$set(_vm.periodicity, "selected", $$v)},expression:"periodicity.selected"}}),_c('div',{staticClass:"calc__head"},[_vm._v("Тип уборки")]),_c('multiselect',{staticClass:"calc__dropdown calc__dropdown--cleaning",attrs:{"options":_vm.cleaningType.options,"label":"name","track-by":"id","searchable":false,"show-labels":false,"maxHeight":200,"allow-empty":false},model:{value:(_vm.cleaningType.selected),callback:function ($$v) {_vm.$set(_vm.cleaningType, "selected", $$v)},expression:"cleaningType.selected"}})],1):_vm._e()]),_c('div',{class:[{'calc__margin-top': !_vm.additionalServices.show}, 'calc__services'],on:{"click":function($event){$event.preventDefault();_vm.additionalServices.show = !_vm.additionalServices.show}}},[_vm._v("\n                Дополнительные услуги "),(!_vm.additionalServices.show)?_c('span',{staticClass:"calc__icon"},[_vm._v("+")]):_c('span',{staticClass:"calc__icon"},[_vm._v("×")])]),_c('transition',{attrs:{"name":"transition-box","enter-active-class":"animated fadeIn delay-1s"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.additionalServices.show),expression:"additionalServices.show"}],staticClass:"calc__services-list"},_vm._l((_vm.additionalServices.data),function(item){return _c('label',{key:item.id,staticClass:"control control-checkbox calc__label",on:{"click":function($event){_vm.changeIndex(item.id)}}},[_vm._v("\n                        "+_vm._s(item.name)+"\n                        "),(_vm.additionalServices.checkedIndex[item.id])?_c('input',{attrs:{"type":"checkbox","checked":""}}):_c('input',{attrs:{"type":"checkbox"}}),_c('div',{staticClass:"control_indicator"})])}),0)])],1),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.info.nextStage),expression:"info.nextStage"}]},[_c('label',{staticClass:"calc__label",attrs:{"for":"calc__name"}},[_vm._v("Имя")]),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.contact.name),expression:"contact.name"},{name:"validate",rawName:"v-validate.disable",value:('required'),expression:"'required'",modifiers:{"disable":true}}],class:{'calc__input': true, 'calc__input--name': true, 'is-danger': _vm.errors.has('calc__name') },attrs:{"id":"calc__name","value":"","placeholder":"Представьтесь","name":"calc__name"},domProps:{"value":(_vm.contact.name)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.contact, "name", $event.target.value)}}}),_c('label',{staticClass:"calc__label",attrs:{"for":"calc__phone"}},[_vm._v("Телефон")]),_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.contact.phone),expression:"contact.phone"},{name:"validate",rawName:"v-validate.disable",value:('required'),expression:"'required'",modifiers:{"disable":true}},{name:"mask",rawName:"v-mask",value:('+7 (999) 999 99 99'),expression:"'+7 (999) 999 99 99'"}],ref:"phone",class:{'calc__input': true, 'calc__input--phone': true, 'is-danger': _vm.errors.has('calc__phone') },attrs:{"id":"calc__phone","placeholder":"Ваш номер","name":"calc__phone"},domProps:{"value":(_vm.contact.phone)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.contact, "phone", $event.target.value)}}}),_c('label',{staticClass:"control control-checkbox"},[_vm._v("\n                Я согласен(а) на обработку моих персональных данных\n                "),_c('input',{attrs:{"type":"checkbox"},on:{"change":_vm.changeDisable}}),_c('div',{staticClass:"control_indicator"})])]),_c('div',{staticClass:"calc__holder"},[(!_vm.info.nextStage)?_c('div',{staticClass:"calc__price"},[_vm._v("от "),_c('span',{staticClass:"calc__sum"},[_vm._v(_vm._s(_vm.animatedNumber))]),_vm._v(" ₽\n            ")]):_vm._e(),_c('button',{ref:"btnResult",class:['btn', 'btn--result', 'hvr-pop', {'is-disable': _vm.btnResult.isDisable}],attrs:{"type":"button"},on:{"click":function($event){$event.preventDefault();return _vm.btnResult.actionFunct($event)}}},[_vm._v(" "+_vm._s(_vm.btnResult.title)+"\n            ")])])])])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/App.vue?vue&type=template&id=19c49f73&
+// CONCATENATED MODULE: ./src/App.vue?vue&type=template&id=75bcb743&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
 var es6_function_name = __webpack_require__("7f7f");
@@ -37179,6 +37179,7 @@ Vue.use(VueInputMask);
     sum: function sum() {
       var _this = this;
 
+      //функция расчёта цены за работы клининга
       var price = 0;
 
       if (!_.isEmpty(this.info.data)) {
@@ -37217,6 +37218,7 @@ Vue.use(VueInputMask);
   mounted: function mounted() {
     var _this2 = this;
 
+    //загружаем данные из json файла (в основном цены) при монтированни формы
     this.$http.get(wp_data.plugin_dir_url + 'json/price.json').then(function (response) {
       _this2.info.data = response.body; //Заполняем список объектов уборки
 
@@ -37244,7 +37246,9 @@ Vue.use(VueInputMask);
 
       _this2.cleaningType.selected = _this2.cleaningType.options[0]; //устанавливаем цену уборки за квадратный метр
 
-      _this2.cleaningArea.price = +_this2.info.data.cleaningArea.price; //устанавливаем дополнительные услуги
+      _this2.cleaningArea.price = +_this2.info.data.cleaningArea.price;
+      _this2.cleaningArea.min = +_this2.info.data.cleaningArea.min;
+      _this2.cleaningArea.max = +_this2.info.data.cleaningArea.max; //устанавливаем дополнительные услуги
 
       _this2.additionalServices.data = _this2.info.data.additionalServices;
       _this2.additionalServices.checkedIndex = Array(_this2.additionalServices.data.length).fill(false); // this.demoStage()
@@ -37259,10 +37263,38 @@ Vue.use(VueInputMask);
     log: function log(e) {
       console.log(e);
     },
+    //Меняем индекс в массиве дополнительных услуги и через splice, т.е. прямое изменение элемента массива нереактивно.
     changeIndex: _.debounce(function (index) {
       this.additionalServices.checkedIndex.splice(index, 1, !this.additionalServices.checkedIndex[index]);
     }, 50),
     orderAction: function orderAction() {
+      //при нажатии на кнопку "Заказать" происходит проверка находится ли площадь помещения в указанном интервале.
+      // Если нет, то выводиться сообщение об ошибке
+      if (+this.objectCleaning.selected.id !== 0) {
+        var areaValue = this.cleaningArea.value;
+        var min = this.cleaningArea.min;
+        var max = this.cleaningArea.max;
+
+        if (areaValue >= min && areaValue <= max) {
+          this.nextStageStep();
+        } else {
+          var Toast = this.$swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 4000
+          });
+          Toast.fire({
+            type: 'error',
+            title: "\u041F\u043B\u043E\u0449\u0430\u0434\u044C \u0443\u0431\u043E\u0440\u043A\u0438 \u0434\u043E\u043B\u0436\u043D\u0430 \u0431\u044B\u0442\u044C \u043E\u0442 ".concat(min, " \u0434\u043E ").concat(max, " \u043C^2")
+          });
+        }
+      } else {
+        this.nextStageStep();
+      }
+    },
+    nextStageStep: function nextStageStep() {
+      //переход к следующему этапу
       this.info.nextStage = true;
       this.btnResult.actionFunct = this.sendAction;
       this.btnResult.title = 'Отправить';
@@ -37271,6 +37303,8 @@ Vue.use(VueInputMask);
     sendAction: function sendAction() {
       var _this3 = this;
 
+      //Процедура отправки данных на сервер.
+      //Проводим валидацию, заполняем данные, получаем ответ успешный или провальный
       this.$validator.validateAll().then(function (result) {
         if (result) {
           var formData = new FormData();
@@ -37278,6 +37312,30 @@ Vue.use(VueInputMask);
           formData.append('nonce', wp_data.nonce);
           formData.append('name', _this3.contact.name);
           formData.append('phone', _this3.contact.phone);
+          formData.append('objectCleaning', _this3.objectCleaning.selected.name);
+
+          if (+_this3.objectCleaning.selected.id === 0) {
+            formData.append('numberOfRooms', _this3.numberOfRooms.selected.name);
+          } else {
+            formData.append('cleaningArea', _this3.cleaningArea.value);
+          }
+
+          formData.append('periodicity', _this3.periodicity.selected.name);
+          formData.append('cleaningType', _this3.cleaningType.selected.name);
+          var j = 0;
+
+          _this3.additionalServices.checkedIndex.forEach(function (item, i) {
+            if (item) {
+              formData.append("additionalServices".concat(j), _this3.additionalServices.data[i].name);
+              j++;
+            }
+          });
+
+          if (j !== 0) {
+            formData.append('additionalServicesCount', j);
+          }
+
+          formData.append('sum', _this3.sum);
 
           _this3.$http.post(wp_data.url_ajax, formData).then(function (response) {
             var answer = response.data;
@@ -37291,11 +37349,26 @@ Vue.use(VueInputMask);
                 confirmButtonColor: '#F25E99'
               });
             } else {
-              /*answer.data.forEach((element) => {
-                this.objAlertResult.message += element + '<br />'
-              })*/
+              var message = '';
+              answer.data.forEach(function (element) {
+                message += element;
+              });
+
+              _this3.$swal.fire({
+                type: 'error',
+                title: 'Ошибка',
+                text: message,
+                confirmButtonColor: '#F25E99'
+              });
             }
-          }, function (response) {});
+          }, function (response) {
+            _this3.$swal.fire({
+              type: 'error',
+              title: 'Ошибка',
+              text: response.statusText,
+              confirmButtonColor: '#F25E99'
+            });
+          });
         } else {
           console.log('Ошибка при заполнении данных!');
         }

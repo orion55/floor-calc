@@ -28,8 +28,8 @@ function floor_add()
     if (count($errorArr) > 0) {
         wp_send_json_error($errorArr);
     } else {
-        wp_send_json_success('Заявка успешно зарегистрирована!');
-//        wp_send_json_success(wp_json_encode($_POST));
+//        wp_send_json_success('Заявка успешно зарегистрирована!');
+        wp_send_json_success($_POST);
     }
     wp_die();
 }

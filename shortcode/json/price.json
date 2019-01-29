@@ -73,7 +73,9 @@
     }
   ],
   "cleaningArea": {
-    "price": 40
+    "price": 40,
+    "min": 40,
+    "max": 220
   },
   "additionalServices": [
     {
