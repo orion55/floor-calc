@@ -240,7 +240,7 @@
           this.additionalServices.data = this.info.data.additionalServices
           this.additionalServices.checkedIndex = Array(this.additionalServices.data.length).fill(false)
 
-          // this.demoStage()
+          this.demoStage()
 
           this.info.loading = false
         }, error => {
@@ -354,9 +354,9 @@
           })
       },
       demoStage: function () {
-        this.btnResult.actionFunct = this.sendAction
-        this.btnResult.title = 'Отправить'
-        this.info.nextStage = true
+        // this.btnResult.actionFunct = this.sendAction
+        // this.btnResult.title = 'Отправить'
+        // this.info.nextStage = true
         this.contact.name = 'Иван Иванов'
         this.contact.phone = '+7 (111) 111 11 11'
         this.btnResult.isDisable = false
