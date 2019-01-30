@@ -6,7 +6,27 @@ function floor_add()
 {
     function contact_send($info)
     {
+        $title = 'Новый заказ - ' . $info['name'];
+        $headers[] = 'From: polclean.ru <mail@polclean.ru>';
+        $headers[] = 'Content-type: text/html; charset=utf-8';
 
+        $floorcalc_options = get_option( 'floorcalc_option_name' );
+        $email = $floorcalc_options['manager_email_0'];
+        if (!empty($email)) {
+
+            $message = '<html><body>';
+            $message .= '<table rules="all" style="border-color: #666;" cellpadding="10" border="1">';
+            $message .= "<tr style='background: #eee;'><td><strong>Имя:</strong> </td><td>" . $info['name'] . "</td></tr>";
+            $message .= "<tr><td><strong>Телефон:</strong> </td><td>" . $info['phone'] . "</td></tr>";
+            $message .= "</table>";
+            $message .= "</body></html>";
+
+            if (!wp_mail($email, $title, $message, $headers)) {
+                array_push($errorArr, 'Ошибка при отправки письма!');
+            }
+        } else {
+            array_push($errorArr, 'Ошибка при отправки письма! Email отправки не указан!');
+        }
     }
 
     if (empty($_POST['nonce'])) {
