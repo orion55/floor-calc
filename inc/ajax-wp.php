@@ -10,7 +10,7 @@ function floor_add()
         $headers[] = 'From: polclean.ru <mail@polclean.ru>';
         $headers[] = 'Content-type: text/html; charset=utf-8';
 
-        $floorcalc_options = get_option( 'floorcalc_option_name' );
+        $floorcalc_options = get_option('floorcalc_option_name');
         $email = $floorcalc_options['manager_email_0'];
         if (!empty($email)) {
 
@@ -18,6 +18,23 @@ function floor_add()
             $message .= '<table rules="all" style="border-color: #666;" cellpadding="10" border="1">';
             $message .= "<tr style='background: #eee;'><td><strong>Имя:</strong> </td><td>" . $info['name'] . "</td></tr>";
             $message .= "<tr><td><strong>Телефон:</strong> </td><td>" . $info['phone'] . "</td></tr>";
+            $message .= "<tr style='background: #eee;'><td><strong>Объект клининга:</strong> </td><td>" . $info['objectCleaning'] . "</td></tr>";
+            if ($info['numberOfRooms'] !== '') {
+                $message .= "<tr><td><strong>Количество комнат:</strong> </td><td>" . $info['numberOfRooms'] . "</td></tr>";
+            }
+            if ($info['cleaningArea'] !== 0) {
+                $message .= "<tr><td><strong>Площадь уборки:</strong> </td><td>" . $info['cleaningArea'] . "</td></tr>";
+            }
+            $message .= "<tr style='background: #eee;'><td><strong>Периодичность уборки:</strong> </td><td>" . $info['periodicity'] . "</td></tr>";
+            $message .= "<tr><td><strong>Тип уборки:</strong> </td><td>" . $info['cleaningType'] . "</td></tr>";
+            if ($info['additionalServicesCount'] !== 0) {
+                $msg = '';
+                for ($i = 0; $i <= $info['additionalServicesCount'] - 1; $i++) {
+                    $msg .= $info["additionalServices$i"] . '<br>';
+                }
+                $message .= "<tr style='background: #eee;'><td><strong>Дополнительные услуги:</strong> </td><td>" . $msg . "</td></tr>";
+            }
+            $message .= "<tr><td><strong>Сумма:</strong> </td><td>" . $info['sum'] . " руб.</td></tr>";
             $message .= "</table>";
             $message .= "</body></html>";
 
@@ -53,6 +70,7 @@ function floor_add()
             $info["additionalServices$i"] = (isset($_POST["additionalServices$i"]) ? sanitize_text_field($_POST["additionalServices$i"]) : '');
         }
     }
+    $info['sum'] = (isset($_POST['sum']) ? intval($_POST['sum']) : 0);
 
     $errorArr = [];
 
@@ -61,8 +79,8 @@ function floor_add()
     if (count($errorArr) > 0) {
         wp_send_json_error($errorArr);
     } else {
-//        wp_send_json_success('Заявка успешно зарегистрирована!');
-        wp_send_json_success($info);
+        wp_send_json_success('Заявка успешно зарегистрирована!');
+//        wp_send_json_success($info);
     }
     wp_die();
 }

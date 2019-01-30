@@ -76,7 +76,7 @@
                        v-validate.disable="'required'" name="calc__phone" v-mask="'+7 (999) 999 99 99'">
                 <label class="control control-checkbox">
                     Я согласен(а) на обработку моих персональных данных
-                    <input type="checkbox" @change="changeDisable"/>
+                    <input type="checkbox" @change="changeDisable" ref="controlCheckbox"/>
                     <div class="control_indicator"></div>
                 </label>
             </div>
@@ -240,7 +240,7 @@
           this.additionalServices.data = this.info.data.additionalServices
           this.additionalServices.checkedIndex = Array(this.additionalServices.data.length).fill(false)
 
-          this.demoStage()
+          // this.demoStage()
 
           this.info.loading = false
         }, error => {
@@ -324,7 +324,7 @@
               this.$http.post(wp_data.url_ajax, formData)
                 .then(response => {
                   let answer = response.data
-                  console.log(answer)
+                  // console.log(answer)
                   if (answer.success) {
                     this.$swal.fire({
                       type: 'success',
@@ -342,11 +342,13 @@
                       confirmButtonColor: '#F25E99'
                     })
                   }
+                  this.firstStage()
                 }, response => {
                   this.$swal.fire({
                     type: 'error', title: 'Ошибка', text: response.statusText,
                     confirmButtonColor: '#F25E99'
                   })
+                  this.firstStage()
                 })
             } else {
               console.log('Ошибка при заполнении данных!')
@@ -360,6 +362,14 @@
         this.contact.name = 'Иван Иванов'
         this.contact.phone = '+7 (111) 111 11 11'
         this.btnResult.isDisable = false
+      },
+      firstStage: function () {
+        this.info.nextStage = false
+        this.btnResult.title = 'Заказать'
+        this.btnResult.actionFunct = this.orderAction
+        this.btnResult.isDisable = false
+        this.$refs.controlCheckbox.checked = false
+        this.additionalServices.show = false
       },
       changeDisable: function () {
         this.btnResult.isDisable = !this.btnResult.isDisable
