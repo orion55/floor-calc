@@ -1,0 +1,29 @@
+#floor-calc .calc__form {
+    position: absolute;
+    top: 40%;
+    right: calc(27% - 145px);
+    transform: translateY(-40%);
+    z-index: 4;
+    margin: 0;
+}
+
+@media only screen and (min-device-width: 768px) and (max-width: 1199px) {
+    #floor-calc .calc__form {
+        top: 50%;
+        right: calc(23% - 145px);
+        transform: translateY(-50%);
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    #floor-calc {
+        padding-top: 30px;
+    }
+
+    #floor-calc .calc__form {
+        position: static;
+        margin: 0 auto;
+        transform: none;
+        border: #E4E4E4 1px solid;
+    }
+}

@@ -387,17 +387,11 @@
 
     #floor-calc {
         .calc__form {
-            position: absolute;
-            top: 50%;
-            left: 15%;
             width: 290px;
             height: 430px;
-            margin: 0;
             padding: 15px;
             background-color: rgba(255, 255, 255, .9);
             box-shadow: 5px 5px 11px rgba(0, 0, 0, .1);
-            transform: translateY(-50%);
-            z-index: 100;
         }
 
         .calc__loader {
