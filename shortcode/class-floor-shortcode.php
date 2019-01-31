@@ -26,10 +26,13 @@ class Floor_Shortcode
     static function register_script()
     {
         $url = plugin_dir_url(__FILE__);
-        wp_register_style('floor', plugin_dir_url(__FILE__) . 'css/floorlib-misc.css', array(), time(), 'all');
-        wp_register_style('floorlibs', plugin_dir_url(__FILE__) . 'dist/floorlib.css', array('floor'), time(), 'all');
+//        wp_register_style('floor', plugin_dir_url(__FILE__) . 'css/floorlib-misc.css', array(), time(), 'all');
+        wp_register_style('floor', plugin_dir_url(__FILE__) . 'css/floorlib-misc.css', array(), null, 'all');
+//        wp_register_style('floorlibs', plugin_dir_url(__FILE__) . 'dist/floorlib.css', array('floor'), time(), 'all');
+        wp_register_style('floorlibs', plugin_dir_url(__FILE__) . 'dist/floorlib.css', array('floor'), null, 'all');
         wp_register_script('vue', plugin_dir_url(__FILE__) . 'js/vue.min.js', array(), null, true);
-        wp_register_script('floorlib', plugin_dir_url(__FILE__) . 'dist/floorlib.umd.min.js', array('vue'), time(), true);
+//        wp_register_script('floorlib', plugin_dir_url(__FILE__) . 'dist/floorlib.umd.min.js', array('vue'), time(), true);
+        wp_register_script('floorlib', plugin_dir_url(__FILE__) . 'dist/floorlib.umd.min.js', array('vue'), null, true);
         wp_register_script('main', plugin_dir_url(__FILE__) . 'js/main.js', array('floorlib'), null, true);
     }
 
